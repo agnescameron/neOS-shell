@@ -11,11 +11,27 @@ run_home () {
 }
 
 run_local_group () {
-  echo "running local group"
+  if [ "$input" == "ls" ]; then
+    file="friend_nodes.txt"
+    while IFS= read line
+      do
+      echo "$line"
+    done <"$file"
+  elif [ "$input" == "add" ]; then
+    echo "adding"
+  else
+    echo "invalid command, for a list of possible commands, type help"
+  fi
 }
 
 run_interplanetary () {
-  echo "running interplanetary"
+    if [ "$input" == "ls" ]; then
+    echo `ipfs bitswap stat`
+  elif [ "$input" == "add" ]; then
+    echo "adding"
+  else
+    echo "invalid command, for a list of possible commands, type help"
+  fi
 }
 
 #handles commands specific to the process state
