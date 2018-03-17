@@ -1,5 +1,36 @@
 #!/bin/bash
 
+run_home () {
+  if [ "$input" == "ls" ]; then
+    echo `ls ~`
+  elif [ "$input" == "add" ]; then
+    echo "adding"
+  else
+    echo "invalid command, for a list of possible commands, type help"
+  fi
+}
+
+run_local_group () {
+  echo "running local group"
+}
+
+run_interplanetary () {
+  echo "running interplanetary"
+}
+
+#handles commands specific to the process state
+process_state () {
+  if [ "$state" == 0 ]; then
+    run_home $input
+  elif [ "$state" == 1 ]; then
+    run_local_group $input
+  else
+    run_interplanetary $input  
+  fi
+}
+
+
+#sets the printstate variable, to output state name to user
 print_state () {
 	if [ "$state" == 0 ]; then
 		printstate="HOME"
@@ -32,9 +63,11 @@ do
   			echo "can't go any higher than this"
   			print_state $state
   			echo "now on $printstate layer"
+        echo "commands are:"
   		else
   			print_state $state
   			echo "move up one layer, now on $printstate layer"
+        echo "commands are:"
   		fi
 	elif [ "$input" == "cd_" ]; then
 		let state--
@@ -44,19 +77,15 @@ do
   			echo "can't go any lower than this"
   			print_state $state
   			echo "now on $printstate layer"
+        echo "commands are:"
   		else
   			print_state $state
   			echo "moved down one layer, now on $printstate layer"
+        echo "commands are:"
   		fi
-    elif [ "$input" == "cd .." ]; then
-      let dirnum++
-    elif [ "$input" == "cd ~" ]; then  
-      let dirnum=0
-    elif [ "$input" == "ls" ]; then
-      echo `ls`
   	elif [ "$input" == "help" ]; then
   		echo "help text"
   	else
-  		echo "not a valid command. for a list of neOS commands, type 'help'"
+  		process_state $state $input
 	fi
 done
