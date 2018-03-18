@@ -52,6 +52,18 @@ process_state () {
   fi
 }
 
+#prints from a file
+print_from_file () {
+  IFS=''
+  echo "
+  "
+  cat "$state.txt" | while read data; do
+    echo "   $data"
+    sleep .08
+  done
+    echo "
+  "
+}
 
 #sets the printstate variable, to output state name to user
 print_state () {
@@ -64,23 +76,36 @@ print_state () {
 	fi
 }
 
-# A sample Bash script, by Ryan
-echo "welcome to the neOS shell.
-to move up a layer, use cd^
-to move down a layer, use cd_"
-
-dirnum=0
+# start here!!
+echo "_________________________________________"
+echo "_________________________________________"
+echo "
+ ##### welcome to the neOS shell. #######
+ ##### to move up a layer, use cd^  #####
+ ##### to move down a layer, use cd_ ####"
+echo "_________________________________________"
+echo "
+ # for layer-specific help, type 'help' #
+ # for 'meta-help' type 'meta-help' #####"
+echo "_________________________________________"
+echo "_________________________________________"
+#initialise variables
 state=0
+dirstate="~"
+
+#main loop
 while :
 do
 	print_state $state
 	printf "$printstate > "
 	read input
 
-
+  #tests if changing level (meta-change).
+  #functions above handle operations specific to each level
+  #also offers meta help (specific help given by just typing 'help')
 	if [ "$input" == "cd^" ]; then
   		let state++
-      dirnum=0
+      dirstate="~"
   		if [ "$state" == 3 ]; then
   			let state--
   			echo "can't go any higher than this"
@@ -90,11 +115,12 @@ do
   		else
   			print_state $state
   			echo "move up one layer, now on $printstate layer"
+        print_from_file "$state"
         echo "commands are:"
   		fi
 	elif [ "$input" == "cd_" ]; then
 		let state--
-    dirnum=0
+    dirstate="~"
 		if [ "$state" == -1 ]; then
   			let state++
   			echo "can't go any lower than this"
@@ -104,9 +130,10 @@ do
   		else
   			print_state $state
   			echo "moved down one layer, now on $printstate layer"
+        print_from_file "$state"
         echo "commands are:"
-  		fi
-  	elif [ "$input" == "help" ]; then
+  		fi    
+  	elif [ "$input" == "meta-help" ]; then
   		echo "help text"
   	else
   		process_state $state $input
