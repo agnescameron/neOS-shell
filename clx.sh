@@ -1,10 +1,17 @@
 #!/bin/bash
 
+handle_home_cd () {
+  echo ${words[1]}
+}
+
 run_home () {
   if [ "$input" == "ls" ]; then
     echo `ls ~`
   elif [ "$input" == "add" ]; then
     echo "adding"
+  elif [[ "$input" == "cd"* ]]; then
+    words=($input)
+    handle_home_cd $words
   else
     echo "invalid command, for a list of possible commands, type help"
   fi
