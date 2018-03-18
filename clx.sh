@@ -1,9 +1,18 @@
 #!/bin/bash
 
+#this is a small, speculative experiment to re-imagine
+#the shell for a worldwide filesystem
+#here, the shell exponentiates, moving between meta-levels
+#of control (here HOME, LOCAL, INTERPLANETARY)
+#using the 'exponential directory' syntax
+
 handle_home_cd () {
   echo ${words[1]}
 }
 
+#handles commands for HOME neOS
+#most similar to the normal shell
+#also includes ipfs-style file sharing
 run_home () {
   if [ "$input" == "ls" ]; then
     echo `ls ~`
@@ -17,6 +26,11 @@ run_home () {
   fi
 }
 
+#handles commands for the local group
+#this includes:
+#ssh into 'friend machines'
+#the RSS field (modification)
+#adding/removing friend nodes
 run_local_group () {
   if [ "$input" == "ls" ]; then
     file="friend_nodes.txt"
@@ -31,6 +45,7 @@ run_local_group () {
   fi
 }
 
+#handles commands in interplanetary mode
 run_interplanetary () {
     if [ "$input" == "ls" ]; then
     echo `ipfs bitswap stat`
@@ -59,7 +74,7 @@ print_from_file () {
   "
   cat "$state.txt" | while read data; do
     echo "   $data"
-    sleep .08
+    sleep .06
   done
     echo "
   "
@@ -76,7 +91,7 @@ print_state () {
 	fi
 }
 
-# start here!!
+# start here
 echo "_________________________________________"
 echo "_________________________________________"
 echo "
